@@ -5957,6 +5957,12 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
                                                                        completion:^{
     }];
     
+    if (event.sentError && [self.activitiesView isKindOfClass:RoomActivitiesView.class])
+    {
+        RoomActivitiesView *roomActivitiesView = (RoomActivitiesView*)self.activitiesView;
+        [roomActivitiesView displayUnsentMessageError:event.sentError];
+    }
+    
     preventBubblesTableViewScroll = YES;
     [self selectEventWithId:selectedEventId];
 }
@@ -5993,6 +5999,12 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
             completion();
         }
     }];
+    
+    if ([self.activitiesView isKindOfClass:RoomActivitiesView.class])
+    {
+        RoomActivitiesView *roomActivitiesView = (RoomActivitiesView*)self.activitiesView;
+        [roomActivitiesView hideUnsentMessageError];
+    }
 }
 
 - (void)enableOverlayContainerUserInteractions:(BOOL)enableOverlayContainerUserInteractions
