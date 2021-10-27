@@ -561,7 +561,7 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
     [super viewWillAppear:animated];
     
     // Screen tracking
-    [[Analytics sharedInstance] trackScreen:@"ChatRoom"];
+    [Analytics.shared trackScreen:@"ChatRoom"];
     
     // Refresh the room title view
     [self refreshRoomTitle];
@@ -599,8 +599,8 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
         [self.roomDataSource reload];
         [LegacyAppDelegate theDelegate].lastNavigatedRoomIdFromPush = nil;
         
-        notificationTaskProfile = [MXSDKOptions.sharedInstance.profiler startMeasuringTaskWithName:AnalyticsNoficationsTimeToDisplayContent
-                                                                                          category:AnalyticsNoficationsCategory];
+        notificationTaskProfile = [MXSDKOptions.sharedInstance.profiler startMeasuringTaskWithName:Analytics.NotificationsTimeToDisplayContent
+                                                                                          category:Analytics.NotificationsCategory];
     }
 }
 

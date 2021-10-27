@@ -157,7 +157,7 @@
     [super viewWillAppear:animated];
 
     // Screen tracking
-    [[Analytics sharedInstance] trackScreen:_screenName];
+    [Analytics.shared trackScreen:_screenName];
 
     // Observe kAppDelegateDidTapStatusBarNotification.
     kAppDelegateDidTapStatusBarNotificationObserver = [[NSNotificationCenter defaultCenter] addObserverForName:kAppDelegateDidTapStatusBarNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notif) {
