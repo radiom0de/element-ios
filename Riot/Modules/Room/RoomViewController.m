@@ -3223,22 +3223,28 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
             }]];
         }
         
-        [currentAlert addAction:[UIAlertAction actionWithTitle:[VectorL10n roomEventActionForward]
-                                                         style:UIAlertActionStyleDefault
-                                                       handler:^(UIAlertAction * action) {
-            self.shareManager = [[ShareManager alloc] initWithShareItemProvider:[[SimpleShareItemProvider alloc] initWithTextMessage:selectedComponent.textMessage]
-                                                                           type:ShareManagerTypeForward];
-            
-            MXWeakify(self);
-            [self.shareManager setCompletionCallback:^(ShareManagerResult result) {
-                MXStrongifyAndReturnIfNil(self);
-                [attachment onShareEnded];
-                [self dismissViewControllerAnimated:YES completion:nil];
-                self.shareManager = nil;
-            }];
-            
-            [self presentViewController:self.shareManager.mainViewController animated:YES completion:nil];
-        }]];
+        if (selectedEvent.sentState == MXEventSentStateSent) {
+            [currentAlert addAction:[UIAlertAction actionWithTitle:[VectorL10n roomEventActionForward]
+                                                             style:UIAlertActionStyleDefault
+                                                           handler:^(UIAlertAction * action) {
+                
+                ForwardingShareItemSender *shareItemSender = [[ForwardingShareItemSender alloc] initWithEvent:selectedEvent];
+                self.shareManager = [[ShareManager alloc] initWithShareItemSender:shareItemSender
+                                                                             type:ShareManagerTypeForward];
+                
+                MXWeakify(self);
+                [self.shareManager setCompletionCallback:^(ShareManagerResult result) {
+                    MXStrongifyAndReturnIfNil(self);
+                    if ([self.presentedViewController isEqual:self.shareManager.mainViewController])
+                    {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    }
+                    self.shareManager = nil;
+                }];
+                
+                [self presentViewController:self.shareManager.mainViewController animated:YES completion:nil];
+            }]];
+        }
         
         if (!isJitsiCallEvent)
         {
@@ -3293,22 +3299,27 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
     }
     else // Add action for attachment
     {
-        if (attachment.type == MXKAttachmentTypeFile ||
-            attachment.type == MXKAttachmentTypeImage ||
-            attachment.type == MXKAttachmentTypeVideo ||
-            attachment.type == MXKAttachmentTypeVoiceMessage) {
+        // Forwarding for already sent attachments
+        if (selectedEvent.sentState == MXEventSentStateSent && (attachment.type == MXKAttachmentTypeFile ||
+                                                                attachment.type == MXKAttachmentTypeImage ||
+                                                                attachment.type == MXKAttachmentTypeVideo ||
+                                                                attachment.type == MXKAttachmentTypeVoiceMessage)) {
             
             [currentAlert addAction:[UIAlertAction actionWithTitle:[VectorL10n roomEventActionForward]
                                                              style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * action) {
-                self.shareManager = [[ShareManager alloc] initWithShareItemProvider:[[SimpleShareItemProvider alloc] initWithAttachment:attachment]
-                                                                               type:ShareManagerTypeForward];
+                
+                ForwardingShareItemSender *shareItemSender = [[ForwardingShareItemSender alloc] initWithEvent:selectedEvent];
+                self.shareManager = [[ShareManager alloc] initWithShareItemSender:shareItemSender
+                                                                             type:ShareManagerTypeForward];
                 
                 MXWeakify(self);
                 [self.shareManager setCompletionCallback:^(ShareManagerResult result) {
                     MXStrongifyAndReturnIfNil(self);
-                    [attachment onShareEnded];
-                    [self dismissViewControllerAnimated:YES completion:nil];
+                    if ([self.presentedViewController isEqual:self.shareManager.mainViewController])
+                    {
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                    }
                     self.shareManager = nil;
                 }];
                 
