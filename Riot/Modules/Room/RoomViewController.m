@@ -2027,6 +2027,16 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
             [self roomInputToolbarViewDidTapFileUpload];
         }]];
     }
+    if (RiotSettings.shared.roomScreenAllowPollsAction)
+    {
+        [actionItems addObject:[[RoomActionItem alloc] initWithImage:[UIImage imageNamed:@"action_poll"] andAction:^{
+            MXStrongifyAndReturnIfNil(self);
+            if ([self.inputToolbarView isKindOfClass:RoomInputToolbarView.class]) {
+                ((RoomInputToolbarView *) self.inputToolbarView).actionMenuOpened = NO;
+            }
+            [self presentPollCreationDialog];
+        }]];
+    }
     roomInputView.actionsBar.actionItems = actionItems;
 }
 
@@ -6643,6 +6653,13 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
     }
     
     [self mention:member];
+}
+
+#pragma mark - Polls
+
+- (void)presentPollCreationDialog
+{
+    
 }
 
 @end

@@ -280,6 +280,7 @@ final class BuildSettings: NSObject {
     static let roomScreenAllowMediaLibraryAction: Bool = true
     static let roomScreenAllowStickerAction: Bool = true
     static let roomScreenAllowFilesAction: Bool = true
+    static let roomScreenAllowPollsAction: Bool = true
     
     /// Allow split view detail view stacking    
     static let allowSplitViewDetailsScreenStacking: Bool = true
