@@ -1987,16 +1987,6 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
     RoomInputToolbarView *roomInputView = ((RoomInputToolbarView *) self.inputToolbarView);
     MXWeakify(self);
     NSMutableArray *actionItems = [NSMutableArray new];
-    if (RiotSettings.shared.roomScreenAllowCameraAction)
-    {
-        [actionItems addObject:[[RoomActionItem alloc] initWithImage:[UIImage imageNamed:@"action_camera"] andAction:^{
-            MXStrongifyAndReturnIfNil(self);
-            if ([self.inputToolbarView isKindOfClass:RoomInputToolbarView.class]) {
-                ((RoomInputToolbarView *) self.inputToolbarView).actionMenuOpened = NO;
-            }
-            [self showCameraControllerAnimated:YES];
-        }]];
-    }
     if (RiotSettings.shared.roomScreenAllowMediaLibraryAction)
     {
         [actionItems addObject:[[RoomActionItem alloc] initWithImage:[UIImage imageNamed:@"action_media_library"] andAction:^{
@@ -2035,6 +2025,16 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
                 ((RoomInputToolbarView *) self.inputToolbarView).actionMenuOpened = NO;
             }
             [self presentPollCreationDialog];
+        }]];
+    }
+    if (RiotSettings.shared.roomScreenAllowCameraAction)
+    {
+        [actionItems addObject:[[RoomActionItem alloc] initWithImage:[UIImage imageNamed:@"action_camera"] andAction:^{
+            MXStrongifyAndReturnIfNil(self);
+            if ([self.inputToolbarView isKindOfClass:RoomInputToolbarView.class]) {
+                ((RoomInputToolbarView *) self.inputToolbarView).actionMenuOpened = NO;
+            }
+            [self showCameraControllerAnimated:YES];
         }]];
     }
     roomInputView.actionsBar.actionItems = actionItems;
