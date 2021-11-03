@@ -2363,6 +2363,34 @@ public class VectorL10n: NSObject {
   public static func pinProtectionSettingsSectionHeaderWithBiometrics(_ p1: String) -> String {
     return VectorL10n.tr("Vector", "pin_protection_settings_section_header_with_biometrics", p1)
   }
+  /// Add option
+  public static var pollCreationDialogAddOption: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_add_option") 
+  }
+  /// Create options
+  public static var pollCreationDialogCreateOptions: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_create_options") 
+  }
+  /// Create poll
+  public static var pollCreationDialogCreatePoll: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_create_poll") 
+  }
+  /// Write something
+  public static var pollCreationDialogInputPlaceholder: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_input_placeholder") 
+  }
+  /// Option %d
+  public static func pollCreationDialogOptionNumber(_ p1: Int) -> String {
+    return VectorL10n.tr("Vector", "poll_creation_dialog_option_number", p1)
+  }
+  /// Poll question or topic
+  public static var pollCreationDialogPollQuestionOrTopic: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_poll_question_or_topic") 
+  }
+  /// Question or topic
+  public static var pollCreationDialogQuestionOrTopic: String { 
+    return VectorL10n.tr("Vector", "poll_creation_dialog_question_or_topic") 
+  }
   /// Preview
   public static var preview: String { 
     return VectorL10n.tr("Vector", "preview") 

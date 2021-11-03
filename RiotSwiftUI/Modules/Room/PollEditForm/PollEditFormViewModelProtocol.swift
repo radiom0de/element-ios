@@ -1,3 +1,5 @@
+// File created from SimpleUserProfileExample
+// $ createScreen.sh Room/PollEditForm PollEditForm
 // 
 // Copyright 2021 New Vector Ltd
 //
@@ -16,15 +18,10 @@
 
 import Foundation
 
-/// The static list of mocked screens in RiotSwiftUI
-@available(iOS 14.0, *)
-enum MockAppScreens {
-    static let appScreens: [MockScreenState.Type] = [
-        MockTemplateUserProfileScreenState.self,
-        MockTemplateRoomListScreenState.self,
-        MockTemplateRoomChatScreenState.self,
-        MockUserSuggestionScreenState.self,
-        MockPollEditFormScreenState.self
-    ]
+protocol PollEditFormViewModelProtocol {
+    
+    @available(iOS 14, *)
+    var completion: ((PollEditFormViewModelResult) -> Void)? { get set }
+    @available(iOS 14, *)
+    var context: PollEditFormViewModelType.Context { get }
 }
-

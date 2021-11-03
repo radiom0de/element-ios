@@ -43,7 +43,6 @@ PODS:
   - GBDeviceInfo (6.6.0):
     - GBDeviceInfo/Core (= 6.6.0)
   - GBDeviceInfo/Core (6.6.0)
-  - GrowingTextView (0.7.2)
   - GZIP (1.3.0)
   - HPGrowingTextView (1.1)
   - JitsiMeetSDK (3.10.2)
@@ -100,7 +99,7 @@ PODS:
   - Reusable/View (4.1.2)
   - SideMenu (6.5.0)
   - SwiftBase32 (0.9.0)
-  - SwiftGen (6.4.0)
+  - SwiftGen (6.5.1)
   - SwiftJWT (3.6.200):
     - BlueCryptor (~> 1.0)
     - BlueECC (~> 1.1)
@@ -122,13 +121,12 @@ DEPENDENCIES:
   - FLEX (~> 4.5.0)
   - FlowCommoniOS (~> 1.12.0)
   - GBDeviceInfo (~> 6.6.0)
-  - GrowingTextView (~> 0.7.2)
   - KeychainAccess (~> 4.2.2)
   - KTCenterFlowLayout (~> 1.3.1)
   - MatomoTracker (~> 7.4.1)
-  - MatrixKit (= 0.16.9)
-  - MatrixSDK
-  - MatrixSDK/JingleCallStack
+  - MatrixKit (from `../matrix-ios-kit/MatrixKit.podspec`)
+  - MatrixSDK (from `../matrix-ios-sdk/MatrixSDK.podspec`)
+  - MatrixSDK/JingleCallStack (from `../matrix-ios-sdk/MatrixSDK.podspec`)
   - OLMKit
   - ReadMoreTextView (~> 3.0.1)
   - Reusable (~> 4.1)
@@ -156,7 +154,6 @@ SPEC REPOS:
     - FLEX
     - FlowCommoniOS
     - GBDeviceInfo
-    - GrowingTextView
     - GZIP
     - HPGrowingTextView
     - JitsiMeetSDK
@@ -168,8 +165,6 @@ SPEC REPOS:
     - LoggerAPI
     - Logging
     - MatomoTracker
-    - MatrixKit
-    - MatrixSDK
     - OLMKit
     - ReadMoreTextView
     - Realm
@@ -183,6 +178,12 @@ SPEC REPOS:
     - WeakDictionary
     - zxcvbn-ios
     - ZXingObjC
+
+EXTERNAL SOURCES:
+  MatrixKit:
+    :path: "../matrix-ios-kit/MatrixKit.podspec"
+  MatrixSDK:
+    :path: "../matrix-ios-sdk/MatrixSDK.podspec"
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -198,7 +199,6 @@ SPEC CHECKSUMS:
   FLEX: e51461dd6f0bfb00643c262acdfea5d5d12c596b
   FlowCommoniOS: e9ecbc97fb9ce5c593fb3da0e1073b65a3902026
   GBDeviceInfo: ed0db16230d2fa280e1cbb39a5a7f60f6946aaec
-  GrowingTextView: 876bf42005b5e4a4fd740597db12caaf41f0fe6c
   GZIP: 416858efbe66b41b206895ac6dfd5493200d95b3
   HPGrowingTextView: 88a716d97fb853bcb08a4a08e4727da17efc9b19
   JitsiMeetSDK: 2f118fa770f23e518f3560fc224fae3ac7062223
@@ -218,7 +218,7 @@ SPEC CHECKSUMS:
   Reusable: 6bae6a5e8aa793c9c441db0213c863a64bce9136
   SideMenu: f583187d21c5b1dd04c72002be544b555a2627a2
   SwiftBase32: 9399c25a80666dc66b51e10076bf591e3bbb8f17
-  SwiftGen: 67860cc7c3cfc2ed25b9b74cfd55495fc89f9108
+  SwiftGen: a6d22010845f08fe18fbdf3a07a8e380fd22e0ea
   SwiftJWT: 88c412708f58c169d431d344c87bc79a87c830ae
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftyBeaver: 84069991dd5dca07d7069100985badaca7f0ce82
@@ -226,6 +226,6 @@ SPEC CHECKSUMS:
   zxcvbn-ios: fef98b7c80f1512ff0eec47ac1fa399fc00f7e3c
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: 2740772a9b2d32e17876526875dfc58f67240ba0
+PODFILE CHECKSUM: 70f6d28e37aef27a4fc440910661f65e803c6dd8
 
 COCOAPODS: 1.11.2
