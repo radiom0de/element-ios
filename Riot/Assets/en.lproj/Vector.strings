@@ -1783,16 +1783,16 @@ Tap the + to start adding people.";
 
 // Mark: - Polls
 
-"poll_creation_dialog_create_poll" = "Create poll";
+"poll_edit_form_create_poll" = "Create poll";
 
-"poll_creation_dialog_poll_question_or_topic" = "Poll question or topic";
+"poll_edit_form_poll_question_or_topic" = "Poll question or topic";
 
-"poll_creation_dialog_question_or_topic" = "Question or topic";
+"poll_edit_form_question_or_topic" = "Question or topic";
 
-"poll_creation_dialog_input_placeholder" = "Write something";
+"poll_edit_form_input_placeholder" = "Write something";
 
-"poll_creation_dialog_create_options" = "Create options";
+"poll_edit_form_create_options" = "Create options";
 
-"poll_creation_dialog_option_number" = "Option %d";
+"poll_edit_form_option_number" = "Option %d";
 
-"poll_creation_dialog_add_option" = "Add option";
+"poll_edit_form_add_option" = "Add option";

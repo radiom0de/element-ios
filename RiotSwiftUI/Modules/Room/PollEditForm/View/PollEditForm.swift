@@ -35,19 +35,19 @@ struct PollEditForm: View {
         NavigationView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16.0) {
-                    Text(VectorL10n.pollCreationDialogPollQuestionOrTopic)
+                    Text(VectorL10n.pollEditFormPollQuestionOrTopic)
                         .font(theme.fonts.title3)
                         .foregroundColor(theme.colors.primaryContent)
                     
                     VStack(alignment: .leading, spacing: 8.0) {
-                        Text(VectorL10n.pollCreationDialogQuestionOrTopic)
+                        Text(VectorL10n.pollEditFormQuestionOrTopic)
                             .font(theme.fonts.subheadline)
                             .foregroundColor(theme.colors.primaryContent)
                         
-                        MultilineTextField(VectorL10n.pollCreationDialogInputPlaceholder, text: $viewModel.question.text)
+                        MultilineTextField(VectorL10n.pollEditFormInputPlaceholder, text: $viewModel.question.text)
                     }
                     
-                    Text(VectorL10n.pollCreationDialogCreateOptions)
+                    Text(VectorL10n.pollEditFormCreateOptions)
                         .font(theme.fonts.title3)
                         .foregroundColor(theme.colors.primaryContent)
                     
@@ -59,14 +59,14 @@ struct PollEditForm: View {
                         }
                     }
                     
-                    Button(VectorL10n.pollCreationDialogAddOption) {
+                    Button(VectorL10n.pollEditFormAddOption) {
                         viewModel.send(viewAction: .addAnswerOption)
                     }
                     .disabled(!viewModel.viewState.addAnswerOptionButtonEnabled)
                     
                     Spacer()
                     
-                    Button(VectorL10n.pollCreationDialogCreatePoll) {
+                    Button(VectorL10n.pollEditFormCreatePoll) {
                         viewModel.send(viewAction: .create)
                     }
                     .buttonStyle(PrimaryActionButtonStyle(enabled: viewModel.viewState.confirmationButtonEnabled))
@@ -97,12 +97,12 @@ private struct AnswerOptionGroup: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8.0) {
-            Text(VectorL10n.pollCreationDialogOptionNumber(index + 1))
+            Text(VectorL10n.pollEditFormOptionNumber(index + 1))
                 .font(theme.fonts.subheadline)
                 .foregroundColor(theme.colors.primaryContent)
             
             HStack(spacing: 16.0) {
-                TextField(VectorL10n.pollCreationDialogInputPlaceholder, text: binding, onEditingChanged: { edit in
+                TextField(VectorL10n.pollEditFormInputPlaceholder, text: binding, onEditingChanged: { edit in
                     self.focused = edit
                 })
                 .textFieldStyle(BorderedInputFieldStyle(theme: _theme, isEditing: focused))
@@ -130,7 +130,7 @@ private struct NavigationTitleBar: ViewModifier {
                     })
                 }
                 ToolbarItem(placement: .principal) {
-                    Text(VectorL10n.pollCreationDialogCreatePoll)
+                    Text(VectorL10n.pollEditFormCreatePoll)
                         .font(.headline)
                         .foregroundColor(titleColor)
                 }
