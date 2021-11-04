@@ -28,7 +28,7 @@ class PollEditFormViewModelTests: XCTestCase {
         static let displayName = "Alice"
     }
     var service: MockPollEditFormService!
-    var viewModel: PollEditFormViewModelProtocol!
+    var viewModel: PollEditFormViewModel!
     var context: PollEditFormViewModelType.Context!
     var cancellables = Set<AnyCancellable>()
     override func setUpWithError() throws {

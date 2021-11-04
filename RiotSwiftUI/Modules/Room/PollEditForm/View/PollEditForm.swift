@@ -34,40 +34,48 @@ struct PollEditForm: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 16.0) {
                     Text(VectorL10n.pollCreationDialogPollQuestionOrTopic)
                         .font(theme.fonts.title3)
                         .foregroundColor(theme.colors.primaryContent)
-                        .padding(.top, 16.0)
-                        .padding(.bottom, 8.0)
-                    Text(VectorL10n.pollCreationDialogQuestionOrTopic)
-                        .font(theme.fonts.subheadline)
-                        .foregroundColor(theme.colors.primaryContent)
-                    TextField(VectorL10n.pollCreationDialogInputPlaceholder, text: $viewModel.question.text)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    
+                    VStack(alignment: .leading, spacing: 8.0) {
+                        Text(VectorL10n.pollCreationDialogQuestionOrTopic)
+                            .font(theme.fonts.subheadline)
+                            .foregroundColor(theme.colors.primaryContent)
+                        
+                        MultilineTextField(VectorL10n.pollCreationDialogInputPlaceholder, text: $viewModel.question.text)
+                    }
+                    
                     Text(VectorL10n.pollCreationDialogCreateOptions)
                         .font(theme.fonts.title3)
                         .foregroundColor(theme.colors.primaryContent)
-                        .padding(.top, 16.0)
-                        .padding(.bottom, 8.0)
+                    
                     ForEach(0..<viewModel.answerOptions.count, id: \.self) { index in
-                        Safe($viewModel.answerOptions, index: index) { binding in
+                        SafeBindingCollectionEnumerator($viewModel.answerOptions, index: index) { binding in
                             AnswerOptionGroup(binding: binding.text, index: index) {
                                 viewModel.send(viewAction: .deleteAnswerOption(viewModel.answerOptions[index]))
                             }
                         }
                     }
-                    Button(VectorL10n.pollCreationDialogAddOption, action: {
+                    
+                    Button(VectorL10n.pollCreationDialogAddOption) {
                         viewModel.send(viewAction: .addAnswerOption)
-                    })
-                    .padding([.top, .bottom])
-                    .disabled(viewModel.viewState.addAnswerOptionButtonEnabled == false)
+                    }
+                    .disabled(!viewModel.viewState.addAnswerOptionButtonEnabled)
+                    
                     Spacer()
-                    PrimaryActionButton(confirmationButtonEnabled: viewModel.viewState.confirmationButtonEnabled)
+                    
+                    Button(VectorL10n.pollCreationDialogCreatePoll) {
+                        viewModel.send(viewAction: .create)
+                    }
+                    .buttonStyle(PrimaryActionButtonStyle(enabled: viewModel.viewState.confirmationButtonEnabled))
+                    .disabled(!viewModel.viewState.confirmationButtonEnabled)
                 }
+                .animation(.easeOut(duration: 0.1))
                 .padding()
                 .modifier(NavigationTitleBar(titleColor: theme.colors.primaryContent) {
-                    print("Cancelled")
+                    viewModel.send(viewAction: .cancel)
                 })
             }
         }
@@ -76,42 +84,28 @@ struct PollEditForm: View {
 }
 
 @available(iOS 14.0, *)
-private struct PrimaryActionButton: View {
-    @Environment(\.theme) private var theme: ThemeSwiftUI
-    var confirmationButtonEnabled: Bool
-    
-    var body: some View {
-        Button(VectorL10n.pollCreationDialogCreatePoll, action: {
-            print("Create poll")
-        })
-        .disabled(confirmationButtonEnabled == false)
-        .padding(12.0)
-        .frame(maxWidth: .infinity)
-        .foregroundColor(.white)
-        .font(theme.fonts.body)
-        .background(theme.colors.accent)
-        .opacity(confirmationButtonEnabled == true ? 1.0 : 0.6)
-        .cornerRadius(8.0)
-    }
-}
-
-@available(iOS 14.0, *)
 private struct AnswerOptionGroup: View {
     
     @Environment(\.theme) private var theme: ThemeSwiftUI
+    
+    @State private var focused = false
+    
     var binding: Binding<String>
     
     let index: Int
     let onDelete: () -> Void
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 8.0) {
             Text(VectorL10n.pollCreationDialogOptionNumber(index + 1))
                 .font(theme.fonts.subheadline)
                 .foregroundColor(theme.colors.primaryContent)
-            HStack {
-                TextField(VectorL10n.pollCreationDialogInputPlaceholder, text: binding)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            
+            HStack(spacing: 16.0) {
+                TextField(VectorL10n.pollCreationDialogInputPlaceholder, text: binding, onEditingChanged: { edit in
+                    self.focused = edit
+                })
+                .textFieldStyle(BorderedInputFieldStyle(theme: _theme, isEditing: focused))
                 Button {
                     onDelete()
                 } label: {
@@ -152,28 +146,5 @@ struct PollEditForm_Previews: PreviewProvider {
     static let stateRenderer = MockPollEditFormScreenState.stateRenderer
     static var previews: some View {
         stateRenderer.screenGroup()
-    }
-}
-
-/**
- Used to avoid crashes when enumerating through bindings in the AnswerOptions ForEach
- https://stackoverflow.com/q/65375372
- Replace with Swift 5.5 bindings enumerator later.
- */
-@available(iOS 14.0, *)
-private struct Safe<T: RandomAccessCollection & MutableCollection, C: View>: View {
-    
-    typealias BoundElement = Binding<T.Element>
-    private let binding: BoundElement
-    private let content: (BoundElement) -> C
-    
-    init(_ binding: Binding<T>, index: T.Index, @ViewBuilder content: @escaping (BoundElement) -> C) {
-        self.content = content
-        self.binding = .init(get: { binding.wrappedValue[index] },
-                             set: { binding.wrappedValue[index] = $0 })
-    }
-    
-    var body: some View {
-        content(binding)
     }
 }

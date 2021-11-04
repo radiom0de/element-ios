@@ -20,6 +20,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
+@available(iOS 14, *)
 final class PollEditFormCoordinator: Coordinator {
     
     // MARK: - Properties
@@ -28,7 +29,7 @@ final class PollEditFormCoordinator: Coordinator {
     
     private let parameters: PollEditFormCoordinatorParameters
     private let pollEditFormHostingController: UIViewController
-    private var pollEditFormViewModel: PollEditFormViewModelProtocol
+    private var pollEditFormViewModel: PollEditFormViewModel
     
     // MARK: Public
 
@@ -41,7 +42,7 @@ final class PollEditFormCoordinator: Coordinator {
     @available(iOS 14.0, *)
     init(parameters: PollEditFormCoordinatorParameters) {
         self.parameters = parameters
-        let viewModel = PollEditFormViewModel.makePollEditFormViewModel(pollEditFormService: PollEditFormService(session: parameters.session))
+        let viewModel = PollEditFormViewModel()
         let view = PollEditForm(viewModel: viewModel.context)
             .addDependency(AvatarService.instantiate(mediaManager: parameters.session.mediaManager))
         pollEditFormViewModel = viewModel
@@ -55,7 +56,7 @@ final class PollEditFormCoordinator: Coordinator {
             MXLog.debug("[PollEditFormCoordinator] PollEditFormViewModel did complete with result: \(result).")
             guard let self = self else { return }
             switch result {
-            case .cancel, .done:
+            case .cancel, .create(_, _):
                 self.completion?()
             }
         }

@@ -19,25 +19,25 @@
 import SwiftUI
 import Combine
 
-
-
 @available(iOS 14, *)
-typealias PollEditFormViewModelType = StateStoreViewModel<PollEditFormViewState,
-                                                          PollEditFormStateAction,
-                                                          PollEditFormViewAction>
+typealias PollEditFormViewModelType = StateStoreViewModel< PollEditFormViewState,
+                                                           PollEditFormStateAction,
+                                                           PollEditFormViewAction >
 @available(iOS 14, *)
-class PollEditFormViewModel: PollEditFormViewModelType, PollEditFormViewModelProtocol {
+class PollEditFormViewModel: PollEditFormViewModelType {
     
     struct Constants {
         static let maxAnswerOptionsCount = 20
+        static let maxQuestionLength = 200
+        static let maxAnswerOptionLenght = 200
     }
 
     // MARK: - Properties
 
     // MARK: Private
-
+    
     // MARK: Public
-
+    
     var completion: ((PollEditFormViewModelResult) -> Void)?
     
     // MARK: - Setup
@@ -48,9 +48,9 @@ class PollEditFormViewModel: PollEditFormViewModelType, PollEditFormViewModelPro
     
     private static func defaultState() -> PollEditFormViewState {
         return PollEditFormViewState(maxAnswerOptionsCount: Constants.maxAnswerOptionsCount,
-                                     bindings: PollEditFormViewStateBindings(question: PollEditFormQuestion(text: "Which pill?"),
-                                                                             answerOptions: [PollEditFormAnswerOption(text: "Blue"),
-                                                                                             PollEditFormAnswerOption(text: "Red")]))
+                                     bindings: PollEditFormViewStateBindings(question: PollEditFormQuestion(text: "", maxLength: Constants.maxQuestionLength),
+                                                                             answerOptions: [PollEditFormAnswerOption(text: "", maxLength: Constants.maxAnswerOptionLenght),
+                                                                                             PollEditFormAnswerOption(text: "", maxLength: Constants.maxAnswerOptionLenght)]))
     }
     
     // MARK: - Public
@@ -58,7 +58,9 @@ class PollEditFormViewModel: PollEditFormViewModelType, PollEditFormViewModelPro
     override func process(viewAction: PollEditFormViewAction) {
         switch viewAction {
         case .cancel:
-            print("Dismiss everything")
+            completion?(.cancel)
+        case .create:
+            completion?(.create(state.bindings.question.text, state.bindings.answerOptions.map { $0.text}))
         default:
             dispatch(action: .viewAction(viewAction))
         }
@@ -71,18 +73,10 @@ class PollEditFormViewModel: PollEditFormViewModelType, PollEditFormViewModelPro
             case .deleteAnswerOption(let answerOption):
                 state.bindings.answerOptions.removeAll { $0 == answerOption}
             case .addAnswerOption:
-                state.bindings.answerOptions.append(PollEditFormAnswerOption(text: ""))
+                state.bindings.answerOptions.append(PollEditFormAnswerOption(text: "", maxLength: Constants.maxAnswerOptionLenght))
             default:
                 break
             }
         }
-    }
-
-    private func done() {
-        completion?(.done)
-    }
-
-    private func cancel() {
-        completion?(.cancel)
     }
 }

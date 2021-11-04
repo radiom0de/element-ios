@@ -118,6 +118,5 @@ struct BorderedInputFieldStyle_Previews: PreviewProvider {
             .padding()
             .theme(ThemeIdentifier.dark)
         }
-
     }
 }

@@ -29,23 +29,37 @@ enum PollEditFormViewAction {
     case addAnswerOption
     case deleteAnswerOption(PollEditFormAnswerOption)
     case cancel
+    case create
 }
 
 @available(iOS 14, *)
 enum PollEditFormViewModelResult {
     case cancel
-    case done
+    case create(String, [String])
 }
 
 @available(iOS 14, *)
 struct PollEditFormQuestion {
-    var text: String
+    var text: String {
+        didSet {
+            text = String(text.prefix(maxLength))
+        }
+    }
+    
+    let maxLength: Int
 }
 
 @available(iOS 14, *)
 struct PollEditFormAnswerOption: Identifiable, Equatable {
-    var text: String
-    var id = UUID()
+    let id = UUID()
+
+    var text: String {
+        didSet {
+            text = String(text.prefix(maxLength))
+        }
+    }
+    
+    let maxLength: Int
 }
 
 @available(iOS 14, *)
