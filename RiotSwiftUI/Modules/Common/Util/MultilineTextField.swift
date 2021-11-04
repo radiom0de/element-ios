@@ -41,27 +41,57 @@ struct MultilineTextField: View {
         self._showingPlaceholder = State<Bool>(initialValue: self.text.isEmpty)
     }
     
+    private var textColor: Color {
+        if (theme.identifier == ThemeIdentifier.dark) {
+            return theme.colors.primaryContent
+        } else {
+            return theme.colors.primaryContent
+        }
+    }
+    
+    private var backgroundColor: Color {
+        return theme.colors.background
+    }
+    
+    private var placeholderColor: Color {
+        return theme.colors.tertiaryContent
+    }
+    
+    private var borderColor: Color {
+        if isEditing {
+            return theme.colors.accent
+        }
+        
+        return theme.colors.quarterlyContent
+    }
+    
+    private var borderWidth: CGFloat {
+        return isEditing ? 2.0 : 1.5
+    }
+    
     var body: some View {
         let rect = RoundedRectangle(cornerRadius: 8.0)
         return UITextViewWrapper(text: self.internalText, calculatedHeight: $dynamicHeight, isEditing: $isEditing)
             .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
-            .font(theme.fonts.callout)
-            .background(placeholderView, alignment: .topLeading)
-            .clipShape(rect)
             .padding(4.0)
-            .overlay(rect.stroke((isEditing ? theme.colors.accent : theme.colors.quarterlyContent),
-                                 lineWidth: (isEditing ? 2.0 : 1.5)))
+            .background(placeholderView, alignment: .topLeading)
+            .background(backgroundColor)
+            .clipShape(rect)
+            .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
+            .introspectTextView { textView in
+                textView.textColor = UIColor(textColor)
+                textView.font = theme.fonts.uiFonts.callout
+            }
     }
 
     private var placeholderView: some View {
         Group {
             if showingPlaceholder {
                 Text(placeholder)
-                    .foregroundColor(theme.colors.tertiaryContent)
+                    .foregroundColor(placeholderColor)
                     .font(theme.fonts.callout)
-                    .padding(.leading, 4.0)
-                    .padding(.top, 8.0)
-                    .opacity(0.6)
+                    .padding(.leading, 8.0)
+                    .padding(.top, 12.0)
             }
         }
     }
@@ -154,6 +184,11 @@ struct MultilineTextField_Previews: PreviewProvider {
         return Group {
             VStack {
                 PreviewWrapper()
+                PlaceholderPreviewWrapper()
+                PreviewWrapper()
+                    .theme(ThemeIdentifier.dark)
+                PlaceholderPreviewWrapper()
+                    .theme(ThemeIdentifier.dark)
             }
         }
         .padding()
@@ -161,6 +196,14 @@ struct MultilineTextField_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         @State(initialValue: "123") var text: String
+
+        var body: some View {
+            MultilineTextField("Placeholder", text: $text)
+        }
+    }
+    
+    struct PlaceholderPreviewWrapper: View {
+        @State(initialValue: "") var text: String
 
         var body: some View {
             MultilineTextField("Placeholder", text: $text)
