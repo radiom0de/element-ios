@@ -94,6 +94,7 @@ struct MultilineTextField: View {
                     .padding(.top, 12.0)
             }
         }
+        .animation(.none)
     }
 }
 

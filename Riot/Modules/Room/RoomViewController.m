@@ -2024,7 +2024,7 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
             if ([self.inputToolbarView isKindOfClass:RoomInputToolbarView.class]) {
                 ((RoomInputToolbarView *) self.inputToolbarView).actionMenuOpened = NO;
             }
-            [self presentPollCreationDialog];
+            [self.delegate roomViewControllerDidRequestPollCreationFormPresentation:self];
         }]];
     }
     if (RiotSettings.shared.roomScreenAllowCameraAction)
@@ -6653,13 +6653,6 @@ const NSTimeInterval kResizeComposerAnimationDuration = .05;
     }
     
     [self mention:member];
-}
-
-#pragma mark - Polls
-
-- (void)presentPollCreationDialog
-{
-    
 }
 
 @end

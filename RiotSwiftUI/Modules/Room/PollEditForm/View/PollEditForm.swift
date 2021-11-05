@@ -33,50 +33,53 @@ struct PollEditForm: View {
     
     var body: some View {
         NavigationView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16.0) {
-                    Text(VectorL10n.pollEditFormPollQuestionOrTopic)
-                        .font(theme.fonts.title3)
-                        .foregroundColor(theme.colors.primaryContent)
-                    
-                    VStack(alignment: .leading, spacing: 8.0) {
-                        Text(VectorL10n.pollEditFormQuestionOrTopic)
-                            .font(theme.fonts.subheadline)
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 16.0) {
+                        Text(VectorL10n.pollEditFormPollQuestionOrTopic)
+                            .font(theme.fonts.title3)
                             .foregroundColor(theme.colors.primaryContent)
                         
-                        MultilineTextField(VectorL10n.pollEditFormInputPlaceholder, text: $viewModel.question.text)
-                    }
-                    
-                    Text(VectorL10n.pollEditFormCreateOptions)
-                        .font(theme.fonts.title3)
-                        .foregroundColor(theme.colors.primaryContent)
-                    
-                    ForEach(0..<viewModel.answerOptions.count, id: \.self) { index in
-                        SafeBindingCollectionEnumerator($viewModel.answerOptions, index: index) { binding in
-                            AnswerOptionGroup(binding: binding.text, index: index) {
-                                viewModel.send(viewAction: .deleteAnswerOption(viewModel.answerOptions[index]))
+                        VStack(alignment: .leading, spacing: 8.0) {
+                            Text(VectorL10n.pollEditFormQuestionOrTopic)
+                                .font(theme.fonts.subheadline)
+                                .foregroundColor(theme.colors.primaryContent)
+                            
+                            MultilineTextField(VectorL10n.pollEditFormInputPlaceholder, text: $viewModel.question.text)
+                        }
+                        
+                        Text(VectorL10n.pollEditFormCreateOptions)
+                            .font(theme.fonts.title3)
+                            .foregroundColor(theme.colors.primaryContent)
+                        
+                        ForEach(0..<viewModel.answerOptions.count, id: \.self) { index in
+                            SafeBindingCollectionEnumerator($viewModel.answerOptions, index: index) { binding in
+                                AnswerOptionGroup(binding: binding.text, index: index) {
+                                    viewModel.send(viewAction: .deleteAnswerOption(viewModel.answerOptions[index]))
+                                }
                             }
                         }
+                        
+                        Button(VectorL10n.pollEditFormAddOption) {
+                            viewModel.send(viewAction: .addAnswerOption)
+                        }
+                        .disabled(!viewModel.viewState.addAnswerOptionButtonEnabled)
+                        
+                        Spacer()
+                        
+                        Button(VectorL10n.pollEditFormCreatePoll) {
+                            viewModel.send(viewAction: .create)
+                        }
+                        .buttonStyle(PrimaryActionButtonStyle(enabled: viewModel.viewState.confirmationButtonEnabled))
+                        .disabled(!viewModel.viewState.confirmationButtonEnabled)
                     }
-                    
-                    Button(VectorL10n.pollEditFormAddOption) {
-                        viewModel.send(viewAction: .addAnswerOption)
-                    }
-                    .disabled(!viewModel.viewState.addAnswerOptionButtonEnabled)
-                    
-                    Spacer()
-                    
-                    Button(VectorL10n.pollEditFormCreatePoll) {
-                        viewModel.send(viewAction: .create)
-                    }
-                    .buttonStyle(PrimaryActionButtonStyle(enabled: viewModel.viewState.confirmationButtonEnabled))
-                    .disabled(!viewModel.viewState.confirmationButtonEnabled)
+                    .animation(.easeInOut(duration: 0.2))
+                    .padding()
+                    .frame(minHeight: proxy.size.height) // Make the VStack fill the ScrollView's parent
+                    .modifier(NavigationTitleBar(titleColor: theme.colors.primaryContent) {
+                        viewModel.send(viewAction: .cancel)
+                    })
                 }
-                .animation(.easeOut(duration: 0.1))
-                .padding()
-                .modifier(NavigationTitleBar(titleColor: theme.colors.primaryContent) {
-                    viewModel.send(viewAction: .cancel)
-                })
             }
         }
         .accentColor(theme.colors.accent)
