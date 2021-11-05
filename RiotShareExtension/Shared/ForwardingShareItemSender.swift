@@ -16,14 +16,14 @@
 
 import Foundation
 
-let ForwardingShareItemSenderErrorDomain = "ForwardingShareItemSenderErrorDomain"
-
-enum ForwardingShareItemSenderErrorCode: Int {
-    case eventNotSentYet
-}
-
 @objcMembers
 class ForwardingShareItemSender: NSObject, ShareItemSenderProtocol {
+    
+    let ErrorDomain = "ForwardingShareItemSenderErrorDomain"
+
+    enum ErrorCode: Int {
+        case eventNotSentYet
+    }
     
     private let event: MXEvent
     
@@ -36,8 +36,8 @@ class ForwardingShareItemSender: NSObject, ShareItemSenderProtocol {
     func sendItems(to rooms: [MXRoom]!, success: (() -> Void)!, failure: ((Error?) -> Void)!) {
         guard event.sentState == MXEventSentStateSent else {
             MXLog.error("[ForwardingShareItemSender] Cannot forward unsent event")
-            failure(NSError(domain: ForwardingShareItemSenderErrorDomain,
-                            code: ForwardingShareItemSenderErrorCode.eventNotSentYet.rawValue,
+            failure(NSError(domain: ErrorDomain,
+                            code: ErrorCode.eventNotSentYet.rawValue,
                             userInfo: nil))
             return
         }
