@@ -60,7 +60,7 @@ class PollEditFormViewModel: PollEditFormViewModelType {
         case .cancel:
             completion?(.cancel)
         case .create:
-            completion?(.create(state.bindings.question.text, state.bindings.answerOptions.map { $0.text}))
+            completion?(.create(state.bindings.question.text, state.bindings.answerOptions.compactMap { $0.text.count > 0 ? $0.text : nil }))
         default:
             dispatch(action: .viewAction(viewAction))
         }

@@ -62,7 +62,7 @@ struct PollEditFormViewState: BindableState {
     var bindings: PollEditFormViewStateBindings
     
     var confirmationButtonEnabled: Bool {
-        !bindings.question.text.isEmpty && bindings.answerOptions.filter({ $0.text.isEmpty }).count == 0
+        !bindings.question.text.isEmpty && bindings.answerOptions.filter({ !$0.text.isEmpty }).count >= 2
     }
     
     var addAnswerOptionButtonEnabled: Bool {
